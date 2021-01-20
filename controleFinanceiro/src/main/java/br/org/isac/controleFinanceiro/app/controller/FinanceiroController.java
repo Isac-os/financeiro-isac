@@ -2,6 +2,7 @@ package br.org.isac.controleFinanceiro.app.controller;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.ParseException;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -20,7 +21,9 @@ import com.webcohesion.ofx4j.io.OFXParseException;
 
 import br.org.isac.controleFinanceiro.app.entity.ContaCorrente;
 import br.org.isac.controleFinanceiro.app.repository.ContaCorrenteRepository;
+import br.org.isac.controleFinanceiro.app.util.ConversorCSV;
 import br.org.isac.controleFinanceiro.app.util.ConversorOFX;
+import br.org.isac.controleFinanceiro.app.util.Util;
 
 @RestController
 @RequestMapping("")
@@ -34,15 +37,24 @@ public class FinanceiroController {
 		return new ModelAndView("index", model);
 	}
 	
-	@RequestMapping(value = "/listarTodos", method = RequestMethod.GET) 
-	public ModelAndView listarTodos(ModelMap model, HttpSession session) {
+	@RequestMapping(value = "/listarTodosOFX", method = RequestMethod.GET) 
+	public ModelAndView listarTodosOFX(ModelMap model, HttpSession session) {
 		
-		model.addAttribute("lancamentos", ccRepo.findAll());
+		model.addAttribute("lancamentos", ccRepo.findAllPorTipo("OFX").get());
+		model.addAttribute("tipoArquivo", "OFX");
+		return new ModelAndView("index", model);
+	}
+	
+	@RequestMapping(value = "/listarTodosCSV", method = RequestMethod.GET) 
+	public ModelAndView listarTodosCSV(ModelMap model, HttpSession session) {
+		
+		model.addAttribute("lancamentos", ccRepo.findAllPorTipo("CSV").get());
+		model.addAttribute("tipoArquivo", "CSV");
 		return new ModelAndView("index", model);
 	}
 	
 	@PostMapping("/converterOFX")
-	public ModelAndView converterOFX(@RequestParam("files") MultipartFile[] files, ModelMap model, HttpSession session) {
+	public ModelAndView converterOFX(@RequestParam("filesofx") MultipartFile[] files, ModelMap model, HttpSession session) {
 		
 		try {
 			for(MultipartFile file: files) {
@@ -61,6 +73,27 @@ public class FinanceiroController {
 			e.printStackTrace();
 		}
 		
+		return new ModelAndView("index", model);
+		
+	}
+	
+	@PostMapping("/converterCSV")
+	public ModelAndView converterCSV(@RequestParam("filescsv") MultipartFile[] files, ModelMap model, HttpSession session) throws ParseException {
+		System.out.println("Inicio: "+Util.currentTimestamp());
+		try {
+			for(MultipartFile file: files) {
+				InputStream inputStream = file.getInputStream();
+				List<ContaCorrente> lctos = ConversorCSV.converteCSV(inputStream);
+				
+				for (ContaCorrente cc : lctos) {
+					ccRepo.save(cc);
+				}
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
+		System.out.println("Fim: "+Util.currentTimestamp());
 		return new ModelAndView("index", model);
 		
 	}

@@ -53,8 +53,8 @@
 
 <div class="container-fluid">
   <div class="row">
-    <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
-      <div class="position-sticky pt-3">
+<!--     <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse"> -->
+<!--       <div class="position-sticky pt-3"> -->
 <!--         <ul class="nav flex-column"> -->
 <!--           <li class="nav-item"> -->
 <!--             <a class="nav-link active" aria-current="page" href="#"> -->
@@ -126,12 +126,12 @@
 <!--             </a> -->
 <!--           </li> -->
 <!--         </ul> -->
-      </div>
-    </nav>
+<!--       </div> -->
+<!--     </nav> -->
 
-    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+    <main class="col-md-12 ms-sm-auto col-lg-12 px-md-4">
       <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h1 class="h2">Dashboard</h1>
+        <h1 class="h2">Informações Financeiras - Extratos</h1>
         <div class="btn-toolbar mb-2 mb-md-0">
 <!--           <div class="btn-group me-2"> -->
 <!--             <button type="button" class="btn btn-sm btn-outline-secondary">Share</button> -->
@@ -146,28 +146,59 @@
 
 <!--       <canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas> -->
 
-      <h2>Arquivo OFX - download</h2>
+<div class="row">
+	<div class="col-md-6">
+	
+	      <h2>Arquivo OFX - download</h2>
       
-	<form th:action="@{converterOFX}" th:method="post" enctype="multipart/form-data">
-	  <div class="mb-3">
-	    <label for="exampleInputEmail1" class="form-label">Arquivo OFX</label>
-	    <input type="file" class="form-control" id="files" placeholder="Submeter o arquivo OFX"  name="files" ></input>
-	    <div id="emailHelp" class="form-text">Selecione o arquivo OFX, a partir de seu computador</div>
-	  </div>
-<!-- 	  <div class="mb-3"> -->
-<!-- 	    <label for="exampleInputPassword1" class="form-label">Password</label> -->
-<!-- 	    <input type="password" class="form-control" id="exampleInputPassword1"> -->
-<!-- 	  </div> -->
-<!-- 	  <div class="mb-3 form-check"> -->
-<!-- 	    <input type="checkbox" class="form-check-input" id="exampleCheck1"> -->
-<!-- 	    <label class="form-check-label" for="exampleCheck1">Check me out</label> -->
-<!-- 	  </div> -->
-	  <button type="submit" class="btn btn-primary">Encaminhar arquivo</button>
-	  <a href="listarTodos" class="btn btn-primary">Ver informações extraídas do arquivo</a>
-	</form>
+		<form name="frm0" th:action="@{converterOFX}" th:method="post" enctype="multipart/form-data">
+		  <div class="mb-3">
+		    <label for="exampleInputEmail1" class="form-label">Arquivo OFX</label>
+		    <input type="file" class="form-control" id="filesofx" placeholder="Submeter o arquivo OFX"  name="filesofx" ></input>
+		    <div id="emailHelp" class="form-text">Selecione o arquivo OFX, a partir de seu computador</div>
+		  </div>
+	<!-- 	  <div class="mb-3"> -->
+	<!-- 	    <label for="exampleInputPassword1" class="form-label">Password</label> -->
+	<!-- 	    <input type="password" class="form-control" id="exampleInputPassword1"> -->
+	<!-- 	  </div> -->
+	<!-- 	  <div class="mb-3 form-check"> -->
+	<!-- 	    <input type="checkbox" class="form-check-input" id="exampleCheck1"> -->
+	<!-- 	    <label class="form-check-label" for="exampleCheck1">Check me out</label> -->
+	<!-- 	  </div> -->
+		  <button type="submit" class="btn btn-primary">Encaminhar arquivo OFX</button>
+		  <a href="listarTodosOFX" class="btn btn-primary">Ver informações extraídas do arquivo OFX</a>
+		</form>
+	
+	</div>
+	
+	<div class="col-md-6">
+	
+		      <h2>Arquivo CSV - download</h2>
       
+		<form name="frm1" th:action="@{converterCSV}" th:method="post" enctype="multipart/form-data">
+		  <div class="mb-3">
+		    <label for="exampleInputEmail1" class="form-label">Arquivo CSV</label>
+		    <input type="file" class="form-control" id="filescsv" placeholder="Submeter o arquivo OFX"  name="filescsv" ></input>
+		    <div id="emailHelp" class="form-text">Selecione o arquivo CSV, a partir de seu computador</div>
+		  </div>
+	<!-- 	  <div class="mb-3"> -->
+	<!-- 	    <label for="exampleInputPassword1" class="form-label">Password</label> -->
+	<!-- 	    <input type="password" class="form-control" id="exampleInputPassword1"> -->
+	<!-- 	  </div> -->
+	<!-- 	  <div class="mb-3 form-check"> -->
+	<!-- 	    <input type="checkbox" class="form-check-input" id="exampleCheck1"> -->
+	<!-- 	    <label class="form-check-label" for="exampleCheck1">Check me out</label> -->
+	<!-- 	  </div> -->
+		  <button type="submit" class="btn btn-primary">Encaminhar arquivo CSV</button>
+		  <a href="listarTodosCSV" class="btn btn-primary">Ver informações extraídas do arquivo CSV</a>
+		</form>
+	
+	</div>
+
+</div>
+
       <hr>
-      <h2>Informações extraídas do arquivo OFX e em base de dados</h2>
+      <h2>Informações extraídas do arquivo <span th:text="${tipoArquivo}"> </span> já em base de dados</h2>
       
       <table class="table table-hover">
 	  <thead>
@@ -182,6 +213,9 @@
 	      <th scope="col">Transação</th>
 	      <th scope="col">Data Registro</th>
 	      <th scope="col">Data Arquivo</th>
+	      <th scope="col">Origem</th>
+	      <th scope="col">Natureza</th>
+	      <th scope="col">Info Adicionais</th>
 	    </tr>
 	  </thead>
 	  <tbody>
@@ -197,6 +231,9 @@
    			<td th:text="${l.idTransacao}"></td>
             <td th:text="${l.tsRegistro}"></td>
             <td th:text="${l.dataArquivo}"></td>
+            <td th:text="${l.origem}"></td>
+            <td th:text="${l.natureza}"></td>
+            <td th:text="${l.infoAdicional}"></td>
    		</tr>
 	  
 	  </tbody>

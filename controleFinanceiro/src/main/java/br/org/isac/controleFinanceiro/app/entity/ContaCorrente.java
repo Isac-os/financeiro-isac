@@ -53,6 +53,39 @@ public class ContaCorrente {
 	@DateTimeFormat(pattern = "MM/dd/yyyy")
 	@Temporal(TemporalType.DATE)
 	private Date dataLancamento;
+	
+	@Column(name = "origem")
+	private String origem;
+	
+	@Column(name = "infoAdicional")
+	private String infoAdicional;
+	
+	@Column(name = "natureza")
+	private String natureza;
+	
+	public String getNatureza() {
+		return natureza;
+	}
+
+	public void setNatureza(String natureza) {
+		this.natureza = natureza;
+	}
+
+	public String getOrigem() {
+		return origem;
+	}
+
+	public void setOrigem(String origem) {
+		this.origem = origem;
+	}
+
+	public String getInfoAdicional() {
+		return infoAdicional;
+	}
+
+	public void setInfoAdicional(String infoAdicional) {
+		this.infoAdicional = infoAdicional;
+	}
 
 	public Integer getId() {
 		return id;

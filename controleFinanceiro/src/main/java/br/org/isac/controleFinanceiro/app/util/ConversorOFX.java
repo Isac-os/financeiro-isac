@@ -58,6 +58,7 @@ public class ConversorOFX {
 		        	   cc.setDescricao(transaction.getMemo());
 		        	   cc.setDataLancamento(transaction.getDatePosted());
 		        	   cc.setValor(transaction.getAmount());
+		        	   cc.setOrigem("OFX");
 		        	   
 		        	   lctos.add(cc);
 		        	   
